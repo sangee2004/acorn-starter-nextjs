@@ -1,79 +1,108 @@
 .container {
-    min-height: 100vh;
     padding: 0 0.5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-  
+
 .main {
-    padding: 5rem 0;
+    padding-top: 2rem;
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-  
+
 .title {
     text-align: center;
     margin: 0;
     line-height: 1.15;
-    font-size: 4rem;
+    font-size: 3rem;
 }
 
-.content {
-    width: 90%;
-    height: 70%;
+.form {
+    background-color: #eee;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.inputName {
+    width: 100%;
+    margin: 0.5em 0;
+}
+
+.inputContent {
+    width: 100%;
+    height: 75px;
     resize: none;
+    margin: 0 auto;
 }
 
-.options {
-    display: flex;
-    justify-content: space-between;
-}
-
-.remove, .complete {
-    margin: 10px 20px 10px 20px;
+.inputName, .inputContent {
+    background: #fafafa;
+    border: 1px solid #888;
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 5px;
 }
 
 .submit {
-    width: 90%;
-    padding: 5px;
-    margin: 5px;
+    margin: 5px 0;
 }
 
 .strike {
     text-decoration: line-through;
 }
 
-.grid form, .todo {
+.todo {
+    border-radius: 5px;
+    margin: 0.5rem 0;
     width: 100%;
-    height: 100%;
-}
-  
-.grid {
     display: grid;
-    max-width: 800px;
-    /* grid-column-gap: 100px; */
-    justify-content: center;
-    margin: auto;
-    margin-top: 3rem;
-    gap: 100px;
-    
-    grid-template-columns: auto auto auto;
+    grid-template-areas: "complete name remove" "content content content";
+    grid-template-columns: 40px auto 50px;
+    grid-template-rows: 40px auto;
+    background-color: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 5px;
 }
 
-@media (max-width: 1650px) {
-    .grid {
-        grid-template-columns: auto auto;
-    }
+.viewComplete {
+    grid-area: complete;
+    line-height: 40px;
+    text-align: center;
 }
 
-@media (max-width: 1100px) {
-    .grid {
-        grid-template-columns: auto;
-        width: 100%;
-    }
+.viewName {
+    grid-area: name;
+    line-height: 40px;
+}
+
+.viewRemove {
+    grid-area: remove;
+    line-height: 40px;
+    text-align: center;
+}
+
+.remove {
+    border: 0;
+    background-color: transparent;
+}
+
+.viewContent {
+    grid-area: content;
+    padding: 0 1rem;
+}
+
+.viewContent P {
+    margin: 0.5rem 0;
+}
+
+.viewContent A {
+  color: blue;
+  text-decoration: underline;
 }

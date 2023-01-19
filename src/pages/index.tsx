@@ -1,10 +1,16 @@
-import ProductCard from '../components/ProductCard'
+import ReactMarkdown from 'react-markdown'
+import matter from 'gray-matter'
 import {Todo} from '@prisma/client'
 import React, {useState, useEffect} from 'react'
 import styles from './index.module.css';
+import { nextTick } from 'process'
+
+const message = 'Your Acorn Todos'
 
 type HomeProps = { todos: Array<Todo> }
+
 export default function Home(props: HomeProps) {
+  const [welcome, setWelcome] = useState(message)
   const [name, setName] = useState('')
   const [content, setContent] = useState('')
   const [todos, setTodos] = useState(new Array<Todo>)
@@ -17,9 +23,15 @@ export default function Home(props: HomeProps) {
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({name, content})
       })
+
+      nextTick(() => {
+        setName('')
+        setContent('')
+      })
+
       get()
     } catch (error) {
-      console.error(`Failed to create todo: ${error}`)
+      alert(`Failed to create todo: ${error}`)
     }
   }
 
@@ -31,7 +43,7 @@ export default function Home(props: HomeProps) {
       })
       get()
     } catch (error) {
-      console.error(`Failed to delete todo: ${error}`)
+      alert(`Failed to delete todo: ${error}`)
     }
   }
 
@@ -44,7 +56,7 @@ export default function Home(props: HomeProps) {
       })
       get()
     } catch (error) {
-      console.error(`Failed to update todo: ${error}`)
+      alert(`Failed to update todo: ${error}`)
     }
   }
 
@@ -53,11 +65,17 @@ export default function Home(props: HomeProps) {
       const res = await fetch(`/api/todos`)
       setTodos(await res.json() as Todo[])
     } catch (error) {
-      console.error(`Failed to get todos: ${error}`)
+      alert(`Failed to get todos: ${error}`)
     }
   }
 
-  useEffect(() => { get() }, [])
+  useEffect(() => {
+    if ( window.top ) {
+      window.top.postMessage('updated','*')
+    }
+    setWelcome(message)
+    get()
+  }, [])
 
   return (
     <div className={styles.container}>
@@ -69,63 +87,43 @@ export default function Home(props: HomeProps) {
 
       <div className={styles.main}>
         <div className={styles.header}>
-          <div className={styles.title}>Your Acorn application is now running!</div>
+          <div className={styles.title}>{welcome}</div>
           <hr/>
         </div>
-        <div className={styles.grid}>
-          <ProductCard>
-            <form onSubmit={create}>
-              <p 
-                contentEditable="true" 
-                onBlur={(e) => setName(String(e.currentTarget.textContent))}
-                suppressContentEditableWarning={true}
-              >
-                  New Todo
-              </p>
-              <textarea className={styles.content} placeholder="Content" onChange={(e) => setContent(e.target.value)}/>
-              <br/>
-              <input className={styles.submit} disabled={!name || !content} type="submit" value="Create" />
-            </form>
-          </ProductCard>
-          {todos.map((todo, i) => 
-            <ProductCard key={i}>
-              <div className={styles.todo}>
-                <p
-                  contentEditable={!todo.complete}
-                  suppressContentEditableWarning={true}
-                  onBlur={(e) => {
-                    todo.name = String(e.currentTarget.textContent)
-                    update(e, todo.id, todo)
-                  }}
-                  className={todo.complete ? styles.strike : ""}
-                >
-                  {todo.name}
-                </p>
-                
-                <textarea 
-                  disabled={todo.complete}
-                  className={`${styles.content} ${todo.complete ? styles.strike : ""}`}
-                  defaultValue={String(todo.content)} 
-                  onBlur={(e) => {
-                    todo.content = e.target.value
-                    update(e, todo.id, todo)
-                  }}
-                />
 
-                <div className={styles.options}>
-                  <button className={styles.complete} onClick={(e) => {
-                    todo.complete = !todo.complete
-                    update(e, todo.id, todo)
-                  }}>
-                    {todo.complete ? '✅' : '⬜'}
-                  </button>
-                  <button className={styles.remove} onClick={(e) => remove(e, todo.id) }>🗑️</button>
-                </div>
+        {todos.map((todo, i) => 
+          <div key={i} className={styles.todo}>
+            <div className={styles.viewComplete}>
+              <input type="checkbox" checked={todo.complete} onChange={(e) => {
+                todo.complete = !todo.complete
+                update(e, todo.id, todo)
+              }}/>
+            </div>
+            <div className={styles.viewName}>
+              <span className={todo.complete ? styles.strike : ""}>
+                {todo.name}
+              </span>
+            </div>
+            <div className={styles.viewRemove}>
+              <button className={styles.remove} onClick={(e) => remove(e, todo.id) }>🗑️</button>
+            </div>
+            <div className={styles.viewContent}>
+              <span className={todo.complete ? styles.strike : ""}>
+                <ReactMarkdown linkTarget="_blank">
+                  {todo.content!}
+                </ReactMarkdown>
+              </span>
+            </div>
+          </div>
+        )}
 
-              </div>
-            </ProductCard>
-          )}
-        </div>
+        <form className={styles.form} onSubmit={create}>
+          <input value={name} className={styles.inputName} onChange={(e) => setName(e.target.value)} placeholder="Title"/>
+          <textarea value={content} className={styles.inputContent} placeholder="Detail (markdown allowed)" onChange={(e) => setContent(e.target.value)}/>
+          <br/>
+          <input className={styles.submit} disabled={!name && !content} type="submit" value="Add new todo" />
+        </form>
+
       </div>
     </div>
   )
