@@ -1,7 +1,7 @@
 import ReactMarkdown from 'react-markdown'
 import matter from 'gray-matter'
 import {Todo} from '@prisma/client'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import styles from './index.module.css';
 import { nextTick } from 'process'
 
@@ -65,16 +65,39 @@ export default function Home(props: HomeProps) {
       const res = await fetch(`/api/todos`)
       setTodos(await res.json() as Todo[])
     } catch (error) {
-      alert(`Failed to get todos: ${error}`)
+      console.log(`Failed to get todos: ${error}`)
     }
   }
 
+
+  let ready = useRef(false)
+  let loaded = useRef(false)
+
   useEffect(() => {
-    if ( window.top ) {
-      window.top.postMessage('updated','*')
-    }
     setWelcome(message)
-    get()
+
+    if ( loaded.current ) {
+      if ( window.top && ready.current ) {
+        console.log('Updated')
+        window.top.postMessage('updated','*')
+      } else {
+        console.log('Updated, but not Ready')
+      }
+    } else {
+      loaded.current = true
+
+      console.log('Loaded')
+      get().then(() => {
+        if ( window.top ) {
+          window.top.postMessage('loaded','*')
+        }
+
+        setTimeout(() => {
+          console.log('Ready')
+          ready.current = true
+        }, 3000)
+      })
+    }
   }, [])
 
   return (
