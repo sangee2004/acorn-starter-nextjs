@@ -23,11 +23,11 @@
 }
 
 .form {
-    background-color: #eee;
+    background-color: var(--form-bg);
     width: 100%;
     padding: 0.5rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: 1px solid var(--form-border);;
+    border-radius: var(--radius);
 }
 
 .inputName {
@@ -43,9 +43,8 @@
 }
 
 .inputName, .inputContent {
-    background: #fafafa;
-    border: 1px solid #888;
-    border-radius: 4px;
+    background: var(--field-bg);
+    border: 1px solid var(--field-border);
     font-size: 1rem;
     padding: 5px;
 }
@@ -59,16 +58,15 @@
 }
 
 .todo {
-    border-radius: 5px;
+    border-radius: var(--radius);
     margin: 0.5rem 0;
     width: 100%;
     display: grid;
     grid-template-areas: "complete name remove" "content content content";
     grid-template-columns: 40px auto 50px;
     grid-template-rows: 40px auto;
-    background-color: #fafafa;
-    border: 1px solid #eee;
-    border-radius: 5px;
+    background-color: var(--todo-bg);
+    border: 1px solid var(--todo-border);
 }
 
 .viewComplete {
@@ -100,9 +98,4 @@
 
 .viewContent P {
     margin: 0.5rem 0;
-}
-
-.viewContent A {
-  color: blue;
-  text-decoration: underline;
 }

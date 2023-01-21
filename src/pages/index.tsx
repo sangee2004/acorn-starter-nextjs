@@ -141,8 +141,8 @@ export default function Home(props: HomeProps) {
         )}
 
         <form className={styles.form} onSubmit={create}>
-          <input value={name} className={styles.inputName} onChange={(e) => setName(e.target.value)} placeholder="Title"/>
-          <textarea value={content} className={styles.inputContent} placeholder="Detail (markdown allowed)" onChange={(e) => setContent(e.target.value)}/>
+          <input value={name} className={styles.inputName} onChange={(e) => setName(e.target.value)} placeholder="Enter a title"/>
+          <textarea value={content} className={styles.inputContent} placeholder="Add some detail (supports markdown)" onChange={(e) => setContent(e.target.value)}/>
           <br/>
           <input className={styles.submit} disabled={!name && !content} type="submit" value="Add new todo" />
         </form>
