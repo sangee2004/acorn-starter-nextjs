@@ -1,8 +1,7 @@
 # ------------------------------
 # Install dependencies
 # ------------------------------
-FROM node:18-alpine AS deps
-RUN apk add --no-cache libc6-compat
+FROM node:18 AS deps
 WORKDIR /app
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \
@@ -25,7 +24,7 @@ RUN npm run build
 # ------------------------------
 # Serve build
 # ------------------------------
-FROM node:18-alpine AS production
+FROM node:18 AS production
 WORKDIR /app
 
 ENV NODE_ENV production
