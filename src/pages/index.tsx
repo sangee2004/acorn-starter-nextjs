@@ -65,35 +65,38 @@ export default function Home(props: HomeProps) {
       const res = await fetch(`/api/todos`)
       setTodos(await res.json() as Todo[])
     } catch (error) {
-      console.log(`Failed to get todos: ${error}`)
+      console.error(`Failed to get todos: ${error}`)
     }
   }
 
 
+  /*
+  / This block communicates with the acorn website for the setup demo.
+  / If you're using this starter on your own, you can ignore or remove it.
+  */
   let ready = useRef(false)
   let loaded = useRef(false)
-
   useEffect(() => {
     setWelcome(message)
 
     if ( loaded.current ) {
       if ( window.top && ready.current ) {
-        console.log('Updated')
+        console.info('Updated')
         window.top.postMessage('updated','*')
       } else {
-        console.log('Updated, but not Ready')
+        console.info('Updated, but not Ready')
       }
     } else {
       loaded.current = true
 
-      console.log('Loaded')
+      console.info('Loaded')
       get().then(() => {
         if ( window.top ) {
           window.top.postMessage('loaded','*')
         }
 
         setTimeout(() => {
-          console.log('Ready')
+          console.info('Ready')
           ready.current = true
         }, 3000)
       })
