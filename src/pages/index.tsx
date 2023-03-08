@@ -5,7 +5,7 @@ import React, {useState, useRef, useEffect} from 'react'
 import styles from './index.module.css';
 import { nextTick } from 'process'
 
-const message = 'Next.js Acorn Starter'
+const message = 'Next.js Acorn Starter1'
 
 type HomeProps = { todos: Array<Todo> }
 
