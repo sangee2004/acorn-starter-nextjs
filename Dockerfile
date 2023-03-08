@@ -12,14 +12,22 @@ RUN \
   fi
 
 # ------------------------------
-# Build NextJS app
+# Generate prisma types
 # ------------------------------
-FROM node:18-slim AS builder
+
+FROM node:18-alpine AS prisma
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-RUN apt-get update && apt-get install -y openssl libssl-dev
+COPY ./prisma ./prisma
 RUN npx prisma generate
+
+# ------------------------------
+# Build NextJS app
+# ------------------------------
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY --from=prisma /app/node_modules ./node_modules
+COPY . .
 RUN npm run build
 
 # ------------------------------
