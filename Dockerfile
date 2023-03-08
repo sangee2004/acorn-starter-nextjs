@@ -1,7 +1,7 @@
 # ------------------------------
 # Install dependencies
 # ------------------------------
-FROM node:18 AS deps
+FROM node:18-alpine AS deps
 WORKDIR /app
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \
@@ -14,17 +14,18 @@ RUN \
 # ------------------------------
 # Build NextJS app
 # ------------------------------
-FROM node:18 AS builder
+FROM node:18-slim AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN apt-get update && apt-get install -y openssl libssl-dev
 RUN npx prisma generate
 RUN npm run build
 
 # ------------------------------
 # Serve build
 # ------------------------------
-FROM node:18 AS production
+FROM node:18-alpine AS production
 WORKDIR /app
 
 ENV NODE_ENV production
