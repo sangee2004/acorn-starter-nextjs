@@ -3,7 +3,7 @@ args: {
   dbUser: localData.defaultDbUser
   // Override the default generate DB password
   dbPass: localData.defaultDbPass
-  // Override the inferred DB host. Note, if override this a DB container will not get created.
+  // Override the inferred DB host. Note, overriding this will cause a DB container to not get created.
   dbHost: localData.defaultDbHost
   // Turn on or off prisma studio being deployed
   withStudio: localData.withStudio
@@ -58,7 +58,7 @@ containers: {
         MYSQL_DATABASE: "app"
         MYSQL_USER: args.dbUser
         MYSQL_PASSWORD: args.dbPass
-        MYSQL_ROOT_PASSWORD: "secret://db-root-password/token"
+        MYSQL_ROOT_PASSWORD: "${secret://db-root-password/token}"
       }
     }
   }
@@ -119,8 +119,8 @@ secrets: {
 
 localData: {
   defaultDbHost: "db:3306/app?charset=utf8mb4&parseTime=True&loc=Local"
-  defaultDbUser: "secret://db-user-creds/username"
-  defaultDbPass: "secret://db-user-creds/password"
+  defaultDbUser: "${secret://db-user-creds/username}"
+  defaultDbPass: "${secret://db-user-creds/password}"
   dbUrlEnvTemplate: "DB_URL=mysql://${DB_USER}:${DB_PASS}@${DB_HOST}"
   withStudio: false
 }

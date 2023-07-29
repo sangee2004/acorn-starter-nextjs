@@ -21,7 +21,7 @@ Here are all of the available run options:
 To get started locally, simply run:
 
 ```shell
-$ acorn run -i .
+$ acorn dev .
 ```
 
 **Note**: When running locally through development mode, [Prisma Studio](https://www.prisma.io/docs/concepts/components/prisma-studio) is enabled. This is only true when running in development mode. In any other scenario the `studio` container will not exist.
@@ -30,5 +30,5 @@ $ acorn run -i .
 Along with this repo, there are customized [GitHub Actions](./.github/workflows/acorn.yaml) that will build and push the Acornfile to `ghcr.io` on a push to `main` or new tag. When running on cluster, you can reference your `ghcr.io` image.
 
 ```shell
-acorn run ghcr.io/tylerslaton/acorn-starter-nextjs
+acorn run ghcr.io/acorn-io/acorn-starter-nextjs
 ```
