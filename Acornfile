@@ -20,6 +20,7 @@ containers: {
 		dirs: "./prisma": "./prisma"
 		env: {
 			DB_URL: localData.dbUrl
+                        TEST: "env"
 		}
 
 		ports: publish: "3000/http"
