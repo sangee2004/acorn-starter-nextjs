@@ -4,7 +4,8 @@ args: {
 }
 
 services: db: {
-	image: "ghcr.io/acorn-io/mariadb:v1.0.0"
+	//image: "ghcr.io/acorn-io/mariadb:v1.0.0"
+	image: "sangeetha/mymariadb:v1"
 	serviceArgs: {
 		dbName:   "app"
 		username: "appuser"
